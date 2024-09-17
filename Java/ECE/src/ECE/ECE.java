@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024 Artis Aizstrauts
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package ECE;
 
 import com.rabbitmq.client.*;
@@ -105,23 +129,14 @@ public class ECE {
 
                 try {
                     ECEMessage message = ECEMessage.JSONToECEData(new String(delivery.getBody(), StandardCharsets.UTF_8));
-
-                    //LOGGER.info("£££££££££££££££££££ Receive data type:" + message.getData().getClass());
-                    //LOGGER.info(" [x] Received '" + new String(delivery.getBody(), StandardCharsets.UTF_8) + "'");
-                    //LOGGER.info(" [x] Message received:");
-                    //LOGGER.info("EXCHANGE_NAME:" + EXCHANGE_NAME);
-                    //LOGGER.info(delivery.getProperties().toString());
-                    //LOGGER.info("Message JSON -> " + message.toJSON());
                     subscribedExchanges.addData(topic, message.tick(), message.data());
                 } catch (Exception e) {
-                    //System.out.println("Exception @ subscribe @ deliverCallback :" + e);
                     LOGGER.severe(e.toString());
                 }
             };
             channel.basicConsume(queueName, true, deliverCallback, consumerTag -> {
             });
         } catch (Exception e) {
-            //System.out.println("Exception @ subscribe @ deliverCallback :" + e);
             LOGGER.severe(e.toString());
         }
     }
